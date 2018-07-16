@@ -6,6 +6,7 @@ import view.Request;
 import view.Response;
 
 import java.util.List;
+import java.util.UUID;
 
 public class ParkingManageController {
     private Request request;
@@ -63,16 +64,40 @@ public class ParkingManageController {
         if(bulid.length != 2){
             response.send("输入格式有误！正确格式为（名称，车位）");
         }else{
-            ParkingLot parkingLot = new ParkingLot("007",bulid[0],Integer.valueOf(bulid[1]).intValue());
+            ParkingLot parkingLot = new ParkingLot(UUID.randomUUID().toString(),bulid[0],Integer.valueOf(bulid[1]).intValue());
             parkingBoy.getParkingLotList().add(parkingLot);
             response.send("停车场添加成功！");
         }
-
         mainController.printMainInterface();
     }
 
     public void parkingManage_deletePage(Request request) {
-        response.send("dddeeelete");
+        String status = "parkingLotNotExist";
+        String result = "";
+        List<ParkingLot> parkingLotList = parkingBoy.getParkingLotList();
+        for(int i=0;i<parkingLotList.size();i++){
+            String id = parkingLotList.get(i).getId();
+            int parkingSpace = parkingLotList.get(i).getReceiptCar().size();
+            if (id.equals(request.getParameter())){
+                status = "parkingLotExist";
+                if(parkingSpace == 0){
+                    status = "canDelete";
+                    parkingLotList.remove(i);
+                    break;
+                }
+            }
+        }
+        switch (status){
+            case "parkingLotNotExist" :
+                result = "停车场删除失败，原因：此停车场不存在！";
+                break;
+            case "parkingLotExist" :
+                result = "停车场删除失败，原因：此停车场中，依然停有汽车，无法删除！";
+                break;
+            case "canDelete" :
+                result = "停车场删除成功！";
+        }
+        response.send(result);
         mainController.printMainInterface();
     }
 }
