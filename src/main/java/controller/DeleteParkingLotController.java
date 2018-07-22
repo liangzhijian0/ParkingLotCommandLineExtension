@@ -22,9 +22,9 @@ public class DeleteParkingLotController implements BaseController {
             parkingBoy.deleteParkingLotById(request.getParameter());
             response.send("停车场删除成功！");
         }catch (ParkingLotNotEmptyException e1){
-            response.send("停车场添加失败，原因：此停车场中，依然停有汽车，无法删除！");
+            response.send("停车场删除失败，原因：此停车场中，依然停有汽车，无法删除！");
         }catch (ParkingLotNotExistException e2){
-            response.send("停车场添加失败，原因：此停车场不存在！");
+            response.send("停车场删除失败，原因：此停车场不存在！");
         }
         return "forward:main";
     }

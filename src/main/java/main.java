@@ -4,7 +4,8 @@ import model.ParkingLot;
 import view.Cli;
 import view.Request;
 import view.Response;
-import java.util.Arrays;
+
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -17,21 +18,23 @@ public class main {
         Router router = initRouter(initRootPath, request);
         router.launch();
 
-        try {
+//        try {
             while (true) {
                 String command = cli.read();
                 request.setParameter(command);
                 router.processRequest(request);
             }
-        } catch (Exception ex) {
-            System.out.println("\n App Exist, cause from route not exist!");
-        }
+//        } catch (Exception ex) {
+//            System.out.println("\n App Exist, cause from route not exist!");
+//        }
     }
 
     private static Router initRouter (String currentPage, Request request) {
         ParkingLot parkingLot1 = new ParkingLot("232","lian",2);
         ParkingLot parkingLot2 = new ParkingLot("32","ddd",4);
-        List<ParkingLot> parkingLotList = Arrays.asList(parkingLot1,parkingLot2);
+        List<ParkingLot> parkingLotList = new ArrayList<>();
+        parkingLotList.add(parkingLot1);
+        parkingLotList.add(parkingLot2);
         ParkingBoy parkingBoy = new ParkingBoy(parkingLotList);
         Response response = new Response();
 

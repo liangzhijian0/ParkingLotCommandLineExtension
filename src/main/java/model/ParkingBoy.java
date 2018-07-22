@@ -56,7 +56,7 @@ public class ParkingBoy {
     public boolean deleteParkingLotById(String id) {
         ParkingLot parkingLot = this.getParkingLotById(id);
         if (parkingLot != null) {
-            if (parkingLot.getSize() == 0) {
+            if (parkingLot.getReceiptCar().size() == 0) {
                 parkingLotList.remove(parkingLot);
                 return true;
             }
@@ -67,7 +67,7 @@ public class ParkingBoy {
 
     public ParkingLot getParkingLotById(String id) {
         for(ParkingLot parkingLot:parkingLotList){
-            if(parkingLot.getId() == id)
+            if(parkingLot.getId().equals(id))
                 return parkingLot;
         }
         return null;

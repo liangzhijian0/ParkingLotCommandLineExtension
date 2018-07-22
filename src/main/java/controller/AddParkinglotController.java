@@ -17,7 +17,7 @@ public class AddParkinglotController implements BaseController {
 
     @Override
     public String process() {
-        String[] build = request.getParameter().split(",");
+        String[] build = request.getParameter().split("，");
         if(build.length != 2){
             response.send("输入格式有误！正确格式为（名称，车位）");
         }else{

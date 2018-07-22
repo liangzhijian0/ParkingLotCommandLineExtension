@@ -14,7 +14,7 @@ public class GotoAddParkinglotController implements BaseController {
 
     @Override
     public String process() {
-        response.send("请输入你套添加的停车场信息（格式为：名称，车位）：");
+        response.send("请输入你要添加的停车场信息（格式为：名称，车位）：");
         return "main/2/2";
     }
 }
