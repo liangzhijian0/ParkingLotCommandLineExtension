@@ -1,6 +1,12 @@
 package model;
 
+import Exception.ParkingLotFullException;
+import Exception.ParkingLotNotEmptyException;
+import Exception.ParkingLotNotExistException;
+import Exception.WrongReceiptException;
+
 import java.util.List;
+import java.util.UUID;
 
 public class ParkingBoy {
     private List<ParkingLot> parkingLotList;
@@ -13,7 +19,7 @@ public class ParkingBoy {
         this.parkingLotList = parkingLotList;
     }
 
-    public Receipt park (Car car) throws ParkingLotFullException{
+    public Receipt park (Car car) throws ParkingLotFullException {
         for(int i=0;i<parkingLotList.size();i++){
             if(!parkingLotList.get(i).isFull()){
                 return  parkingLotList.get(i).park(car);
@@ -30,7 +36,7 @@ public class ParkingBoy {
                 return car;
             }
         }
-        throw new ParkingLotFullException();
+        throw new WrongReceiptException();
     }
 
     public boolean isFull(){
@@ -40,5 +46,30 @@ public class ParkingBoy {
             }
         }
         return true;
+    }
+
+    public void addParkingLot(String name, int size) {
+        ParkingLot parkingLot = new ParkingLot(UUID.randomUUID().toString(),name,size);
+        this.getParkingLotList().add(parkingLot);
+    }
+
+    public boolean deleteParkingLotById(String id) {
+        ParkingLot parkingLot = this.getParkingLotById(id);
+        if (parkingLot != null) {
+            if (parkingLot.getSize() == 0) {
+                parkingLotList.remove(parkingLot);
+                return true;
+            }
+            throw new ParkingLotNotEmptyException();
+        }
+        throw new ParkingLotNotExistException();
+    }
+
+    public ParkingLot getParkingLotById(String id) {
+        for(ParkingLot parkingLot:parkingLotList){
+            if(parkingLot.getId() == id)
+                return parkingLot;
+        }
+        return null;
     }
 }

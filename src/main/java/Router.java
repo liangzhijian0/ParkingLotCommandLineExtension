@@ -1,66 +1,56 @@
-import controller.MainController;
-import controller.ParkingController;
-import controller.ParkingManageController;
+import controller.BaseController;
 import view.Request;
-import view.Response;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Router {
-    private String currentPage = "main";
-    private MainController mainController;
-    private ParkingController parkingController;
-    private ParkingManageController parkingManageController;
-    private Response response = new Response();
 
+    private final String initRoutePath;
+    private String currentPath;
+    private Map<String, BaseController> routeMaps = new HashMap<>();
 
-    public Router(MainController mainController,ParkingController parkingController, ParkingManageController parkingManageController){
-        this.mainController = mainController;
-        this.parkingController = parkingController;
-        this.parkingManageController = parkingManageController;
+    public Router(String initStatus) {
+        this.initRoutePath = initStatus;
+        this.currentPath = initStatus;
     }
 
+    public void launch() {
+        routeMaps.get(this.initRoutePath).process();
+    }
 
-    public void handleRequest(Request request) {
-        switch (currentPage){
-            case "main" :
-                currentPage = mainController.mainPage(request);
-                break;
-            case "parkingService" :{
-                currentPage = parkingController.parkingServicePage(request);
-                break;
-            }
-            case "parkingService_park" :{
-                parkingController.parkingService_parkPage(request);
-                currentPage = "main";
-                break;
-            }
-            case "parkingService_unpark" :{
-                parkingController.parkingService_unparkPage(request);
-                currentPage = "main";
-                break;
-            }
-            case "parkingManage" :{
-                currentPage = parkingManageController.parkingManagePage(request);
-                break;
-            }
-//            case "parkingManage_check" :{
-//                controller.unparkPage(request);
-//                currentPage = "main";
-//                break;
-//            }
-            case "parkingManage_add" :{
-                parkingManageController.parkingManage_addPage(request);
-                currentPage = "main";
-                break;
-            }
-            case "parkingManage_delete" :{
-                parkingManageController.parkingManage_deletePage(request);
-                currentPage = "main";
-                break;
-            }
+    public void registerRouter(String route, BaseController processor) {
+        routeMaps.put(route, processor);
+    }
+
+    public void processRequest(Request request) {
+
+        String routePath = buildLocateRoutePath(request);
+        String forwardRouteRule = routeMaps.get(routePath).process();
+        currentPath = routePath;
+        if (forwardRouteRule != null && forwardRouteRule.contains("forward:")) {
+            currentPath = buildForwardRoutePath(forwardRouteRule);
         }
     }
 
+    private String buildForwardRoutePath(String forwardRouteRule) {
+        String forwardRoute = forwardRouteRule.split(":")[1];
+        routeMaps.get(forwardRoute).process();
+        return forwardRoute;
+    }
 
+    private String buildLocateRoutePath(Request request) {
 
+        String subPath = request.getCommand().isEmpty() ? "" : "/" + translateRequestInput(request);
+        return currentPath + subPath;
+    }
 
+    private String translateRequestInput(Request request) {
+        if (Arrays.asList("1", "2").contains(request.getCommand())) {
+            return request.getCommand();
+        } else {
+            return "*";
+        }
+    }
 }

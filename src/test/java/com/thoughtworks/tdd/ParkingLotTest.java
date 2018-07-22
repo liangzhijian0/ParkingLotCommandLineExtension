@@ -2,7 +2,7 @@ package com.thoughtworks.tdd;
 
 import model.Car;
 import model.ParkingLot;
-import model.ParkingLotFullException;
+import ParkingLotFullException;
 import model.Receipt;
 import org.junit.jupiter.api.Test;
 
