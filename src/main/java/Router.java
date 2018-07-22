@@ -25,7 +25,6 @@ public class Router {
     }
 
     public void processRequest(Request request) {
-
         String routePath = buildLocateRoutePath(request);
         String forwardRouteRule = routeMaps.get(routePath).process();
         currentPath = routePath;
@@ -41,14 +40,14 @@ public class Router {
     }
 
     private String buildLocateRoutePath(Request request) {
-
-        String subPath = request.getCommand().isEmpty() ? "" : "/" + translateRequestInput(request);
+        String subPath = request.getParameter().isEmpty() ? "" : "/" + translateRequestInput(request);
         return currentPath + subPath;
     }
 
     private String translateRequestInput(Request request) {
-        if (Arrays.asList("1", "2").contains(request.getCommand())) {
-            return request.getCommand();
+        if ( Arrays.asList("1", "2").contains(request.getParameter())
+                || (request.getParameter().equals("3") && currentPath.contains("main/2"))) {
+            return request.getParameter();
         } else {
             return "*";
         }
