@@ -9,6 +9,10 @@ public class Receipt {
         this.receiptId = receiptId;
     }
 
+    public Receipt(){
+
+    }
+
     public String getReceiptId() {
         return receiptId;
     }

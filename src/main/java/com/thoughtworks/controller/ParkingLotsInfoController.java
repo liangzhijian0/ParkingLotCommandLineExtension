@@ -26,7 +26,7 @@ public class ParkingLotsInfoController implements BaseController {
         return "forward:main";
     }
 
-    private String formateInfos(List<ParkingLot> parkingLotList) {
+    public String formateInfos(List<ParkingLot> parkingLotList) {
         StringBuffer result = new StringBuffer();
         result.append("|停车场ID|名称|车位|已停车辆|剩余车位|\n");
         for(int i=0;i<parkingLotList.size();i++){

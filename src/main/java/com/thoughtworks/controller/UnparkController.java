@@ -23,10 +23,11 @@ public class UnparkController implements BaseController {
         try {
             Receipt receipt = new Receipt(request.getParameter());
             Car car = parkingBoy.unPark(receipt);
-            response.send("车已取出，您的车牌号是：" + car.getCarId());
+            response.send("车已取出，您的车牌号是: " + car.getCarId());
         }catch (WrongReceiptException e){
             response.send("非法小票，无法取出车，请查证后再输");
+        }finally {
+            return "forward:main";
         }
-        return "forward:main";
     }
 }

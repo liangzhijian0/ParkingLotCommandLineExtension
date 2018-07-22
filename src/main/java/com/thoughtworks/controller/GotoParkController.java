@@ -21,7 +21,7 @@ public class GotoParkController implements BaseController{
             return "forward:main";
         }
         else{
-            response.send("请输入车牌号：");
+            response.send("请输入车牌号:");
             return "main/1/1";
         }
     }
